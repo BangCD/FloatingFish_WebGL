@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html>
+    <style>
+        .wrapper {
+      display: flex;
+    }
+    .wrapper > div {
+    flex: 1;
+    }
+    </style>
+<head>
+    <h1>CSCI 336 Assessment 3 Harman Singh 6618704</h1>
+    <header id="myheader">
+       
+    </header>
+<script id="vertex-shader" type="x-shader/x-vertex">//#version 300 es
+
+    attribute vec4 vPosition; // instead of attribute we use in 
+    attribute vec4 vVertexColor;
+    varying vec4 vColor;  // insted of varying we use out in vertex shader
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+uniform mat4 matrix;
+
+attribute vec3 a_normal;
+varying vec3 v_normal;
+attribute vec2 vTexCoord;
+varying vec2 fTexCoord;
+
+void main()
+{
+   
+ gl_Position = projectionMatrix*modelViewMatrix * matrix * vPosition;
+ fTexCoord = vTexCoord;
+
+ v_normal=a_normal;
+  
+}
+</script>
+<script id="fragment-shader" type="x-shader/x-fragment">//#version 300 es
+precision mediump float;
+varying vec4 vColor;   //in fragment shader varying becomes in 
+//out vec4 myColor; // can declare own output color variable insted of using gl_flagcolor
+
+varying vec2 fTexCoord;
+uniform sampler2D texture;
+
+varying vec3 v_normal;
+
+uniform vec3 u_reverseLightDirection;
+uniform vec4 u_color;
+
+
+void
+main()
+{
+
+    vec3 normal = normalize(v_normal);
+
+    float light = dot(normal, u_reverseLightDirection);
+
+    gl_FragColor.rgb*=light;
+
+ //gl_FragColor = vColor;
+ gl_FragColor = texture2D( texture, fTexCoord );
+}
+</script>
+<img id="fishHead" src="Texture/fishhead3.png" width="0" height="0" >
+<img id="fishFin" src="Texture/FishFin1.jpg" width="0" height="0" >
+<img id="fishScale" src="Texture/fishScale.jpg" width="0" height="0" >
+<img id="fishTopTailFin" src="Texture/BottomFin2.jpg" width="0" height="0" >
+<img id="water" src="ocean.jpg" width="0" height="0" >
+<img id="fishBottomTailFin" src="Texture/topFin1.jpg" width="0" height="0" >
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="Assessment-3.js"></script>
+</head>
+
+
+
+<body>
+
+
+
+<div class="wrapper">
+<div class="box1">
+<canvas id="gl-canvas" style="background: url('ocean.jpg'); background-size:cover" width="720" height="480">
+    Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>  </div>
+<div class="box2">
+<h2 style="font-size: 50px;">Controls</h2>
+<p style="font-size:30px ;">
+    <b>W</b> to go up.<br>
+    <b>S</b> to go down.<br>
+    <b>D</b> to go Right.<br>
+    <b>A</b> to go Left. <br>
+    <b>X</b> to go inwards. <br>
+    <b>Z</b> to come outwards. <br>
+    <b>E</b> to rotate on Y axis. <br>
+    <b>F</b> to rotate on Z axis. <br>
+    <b>R</b> to rotate on X axis. <br>
+</p></div>
+
+     
+</div>    
+    
+
+
+
+
+
+Hold the button to rotate the image   <button id="StopButton">Hold to Rotate</button>
+<pre>
+   <h3> Press 1 to reset the image before pressing another Key</h3> 
+    Press 2 to oscillate the image.                              Press 1 to go back to default state <br>
+    Press 3 repeatedly to Scale the image up and down.           Press 1 to go back to default state <br>
+    Press 4 to Move and rotate the image at Z axis the same time       Press 1 to go back to default state     <br>
+    Press 5 to Move and rotate the image at X axis the same time       Press 1 to go back to default state     <br>
+    Press 6 to Move and rotate the image at Y axis the same time       Press 1 to go back to default state     <br>
+</pre>
+</body>
+</html>
